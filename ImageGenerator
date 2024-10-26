@@ -1,0 +1,32 @@
+from diffusers import StableDiffusionPipeline
+import torch
+from PIL import Image
+
+# Load the pre-trained Stable Diffusion model from Hugging Face's Diffusers library
+pipeline = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5")
+pipeline = pipeline.to("cuda" if torch.cuda.is_available() else "cpu")
+
+def generate_image(prompt):
+    """
+    Generates an image from a text prompt using a pre-trained Stable Diffusion model.
+    
+    Parameters:
+    - prompt (str): The text description of the image to be generated.
+
+    Returns:
+    - PIL.Image: The generated image.
+    """
+    # Generate the image from the prompt
+    image = pipeline(prompt).images[0]
+    
+    return image
+
+# Example usage
+prompt = "a guy with a gun on top of The Mount Everest."
+generated_image = generate_image(prompt)
+
+# Display the generated image
+generated_image.show()
+
+# Optionally, save the generated image
+generated_image.save("generated_image.png")
